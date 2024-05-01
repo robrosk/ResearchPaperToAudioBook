@@ -1,0 +1,100 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.top-bar {
+    background-color: #0056b3;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+    align-items: center;
+}
+
+.top-bar-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.logout-button {
+    background-color: #000000;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;   /* Optional: removes the border */
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    flex-direction: column;
+}
+
+.upload-form {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    width: 80%;
+    display: flex;                /* Enables flexbox layout */
+    justify-content: space-between; /* Spaces children at either end */
+    align-items: center;          /* Aligns children vertically in the middle */
+}
+
+input[type="file"] {
+    flex: 1;                     /* Allows the file input to grow and take up space */
+    margin-right: 1rem;          /* Adds some space between the file input and the button */
+}
+
+.btn-primary {
+    flex-shrink: 0;              /* Prevents the button from shrinking */
+    background-color: #004494;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block;              /* Makes the button a block element within the flex item */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #003073;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .content {
+        padding-top: 1rem;
+    }
+}
+
+/* Blinking animation for uploading status */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.blink {
+    animation: blink 1s linear infinite;
+}
+
+#upload-status {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
