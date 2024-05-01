@@ -23,7 +23,7 @@ app.secret_key = secret_key
 app.config['UPLOAD_FOLDER'] = 'uploads/'  # Define your upload folder path
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-client = OpenAI(api_key=os.environ['API_KEY'])
+client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
 
 def extract_text_from_pdf(pdf_path):
     document = fitz.open(pdf_path)  # Open the PDF with fitz (PyMuPDF)
