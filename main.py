@@ -6,7 +6,7 @@ import fitz
 import os
 from auth import validate_user, generate_token
 from config import secret_key
-from celeryconfig import celery
+from celery import Celery
 
 '''
 Goals:
@@ -25,6 +25,28 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'  # Define your upload folder path
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
+
+def make_celery(app):
+    # Initialize Celery
+    celery = Celery(
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
+    # Run tasks in the application context
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+    celery.Task = ContextTask
+    return celery
+
+app.config.update(
+    CELERY_BROKER_URL=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+    CELERY_RESULT_BACKEND=os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+)
+celery = make_celery(app)
 
 def extract_text_from_pdf(pdf_path):
     document = fitz.open(pdf_path)  # Open the PDF with fitz (PyMuPDF)
