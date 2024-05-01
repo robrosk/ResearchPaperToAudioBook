@@ -1,57 +1,45 @@
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-
-    const fileInput = document.getElementById('fileInput');
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-
-    const uploadStatus = document.getElementById('uploadStatus');
-    uploadStatus.classList.remove('hidden');
-    uploadStatus.textContent = 'Preparing upload...';
-    uploadStatus.style.display = 'block'; // Ensure the status is visible
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/', true);
-
-    xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-            const percentage = (e.loaded / e.total) * 100;
-            if (percentage >= 100) {
-                uploadStatus.textContent = 'Conversion in progress...';
-            } else { 
-                uploadStatus.textContent = 'Uploading... ' + percentage.toFixed(2) + '%';
-            }
-            uploadStatus.classList.add('blink');
-        }
-    };
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const filename = xhr.getResponseHeader('X-Filename') || 'default_filename.mp3'; // Get the filename from the header or use a default
-            const blob = new Blob([xhr.response], {type: 'audio/mpeg'});
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = filename; // Set the filename from the header
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            uploadStatus.textContent = 'Upload complete!';
-            uploadStatus.classList.remove('blink');
-        } else {
-            console.error('Error:', xhr.statusText);
-            uploadStatus.textContent = 'Failed to upload. Status: ' + xhr.status;
-            uploadStatus.classList.remove('blink');
-        }
-    };
-
-    xhr.onerror = function() {
-        console.error('Error during the upload process.');
-        uploadStatus.textContent = 'Upload failed due to a network error.';
+xhr.onload = function() {
+    if (xhr.status === 202) {
+        const response = JSON.parse(xhr.responseText);
+        const taskId = response.task_id;
+        uploadStatus.textContent = 'Conversion started, please wait...';
+        checkTaskStatus(taskId);
+    } else {
+        console.error('Error:', xhr.statusText);
+        uploadStatus.textContent = 'Failed to start conversion. Status: ' + xhr.status;
         uploadStatus.classList.remove('blink');
-    };
+    }
+};
 
-    xhr.responseType = 'blob'; // Expect a binary blob response
-    xhr.send(formData);
-});
+function checkTaskStatus(taskId) {
+    const statusInterval = setInterval(function() {
+        fetch(`/status/${taskId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'complete') {
+                clearInterval(statusInterval);
+                const blob = new Blob([data.file], {type: 'audio/mpeg'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'converted_audio.mp3';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                uploadStatus.textContent = 'Conversion complete!';
+                uploadStatus.classList.remove('blink');
+            } else if (data.status === 'failed') {
+                clearInterval(statusInterval);
+                uploadStatus.textContent = 'Conversion failed.';
+                uploadStatus.classList.remove('blink');
+            }
+        })
+        .catch(error => {
+            console.error('Error checking task status:', error);
+            clearInterval(statusInterval);
+            uploadStatus.textContent = 'Error checking conversion status.';
+            uploadStatus.classList.remove('blink');
+        });
+    }, 5000); // Check every 5 seconds
+}

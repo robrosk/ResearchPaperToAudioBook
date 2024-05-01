@@ -6,6 +6,7 @@ import fitz
 import os
 from auth import validate_user, generate_token
 from config import secret_key
+from celeryconfig import celery
 
 '''
 Goals:
@@ -39,49 +40,17 @@ def home():
 
 @app.route('/', methods=['POST'])
 def upload_file():
-    # error check
     file = request.files['file']
     if file:
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-    
         
-        extracted_text = extract_text_from_pdf(file_path)
-
-        try: 
-            response = client.chat.completions.create(
-            model="gpt-4-turbo",
-            messages=[
-                {"role": "system", "content": """
-                You are a helpful assistant tasked with providing a concise, multi-paragraph summary of the provided research paper. 
-                Focus on preserving critical information and properly attributing key findings to the authors. 
-                Make the summary engaging and accessible, explaining complex concepts in layman's terms. 
-                Ensure the summary is suitable for an audiobook audience and retains all important content without requiring access to the full paper.
-                Make an effort to explain keywords and avoid jargon."""},
-                {"role": "user", "content": extracted_text}
-            ])
-            
-            paper = response.choices[0].message.content
-            file_name = file_path + ".mp3"
-
-            audio_path = Path(__file__).parent / file_name
-            response = client.audio.speech.create(
-            model="tts-1",
-            voice="shimmer",
-            input=paper
-            )
-
-            with open(audio_path, 'wb') as file:  # Open file in binary write mode
-                file.write(response.content)
-        except Exception as e:
-            print(e)
-        finally:
-            os.remove(file_path)
-        response = make_response(send_from_directory(directory=audio_path.parent, path=audio_path.name, as_attachment=True))
-        response.headers['X-Filename'] = audio_path.name
-        response.headers['Access-Control-Expose-Headers'] = 'X-Filename'
-        return response
+        # Start the Celery task
+        task = convert_pdf_to_audio.delay(file_path)
+        
+        # You can return the task id to the user or just a success message
+        return jsonify({"message": "Conversion started", "task_id": task.id}), 202
     else:
         return 'No selected file', 400
     
@@ -95,6 +64,28 @@ def login():
         return jsonify({'token': token}), 200
     else:
         return jsonify({'error': 'Invalid credentials'}), 401  
+    
+@app.route('/status/<task_id>')
+def task_status(task_id):
+    task = celery.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        response = {
+            'state': task.state,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'status': 'Processing...'
+        }
+        if task.info:
+            response['result'] = task.info.get('result', 0)  
+    else:  # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
 
 @app.route('/logout')
 def logout():
@@ -104,6 +95,34 @@ def logout():
 @app.route('/index')
 def index():
     return render_template('index.html')
+
+@celery.task(bind=True)
+def convert_pdf_to_audio(self, file_path):
+    extracted_text = extract_text_from_pdf(file_path)
+    response = client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[{"role": "system", "content": """
+        You are a helpful assistant tasked with providing a concise, multi-paragraph summary of the provided research paper. 
+        Focus on preserving critical information and properly attributing key findings to the authors. 
+        Make the summary engaging and accessible, explaining complex concepts in layman's terms. 
+        Ensure the summary is suitable for an audiobook audience and retains all important content without requiring access to the full paper.
+        Make an effort to explain keywords and avoid jargon."""},
+        {"role": "user", "content": extracted_text}]
+    )
+    paper = response.choices[0].message.content
+    file_name = file_path + ".mp3"
+    audio_path = Path(__file__).parent / file_name
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="shimmer",
+        input=paper
+    )
+    with open(audio_path, 'wb') as file:
+        file.write(response.content)
+    return str(audio_path)
+
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
