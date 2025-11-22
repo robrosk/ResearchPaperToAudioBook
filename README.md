@@ -27,7 +27,7 @@ A modern, full-stack application designed to transform dense research papers int
 *   [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running.
 *   An [OpenAI API Key](https://platform.openai.com/) with access to GPT-4 and TTS models.
 
-## ⚡ Quick Start
+## Quick Start
 
 1.  **Clone the repository:**
     ```bash
