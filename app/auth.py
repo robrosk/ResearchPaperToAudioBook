@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 from flask import session
-from config import users
+from .config import users
 
 
 def validate_user(email, password):
