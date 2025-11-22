@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Research Suite</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="top-bar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/services" style="color: #6b7280; text-decoration: none; display: flex; align-items: center; font-size: 0.9rem; font-weight: 500;">
+                &larr; Services
+            </a>
+            <div class="top-bar-title">Research to Audiobook</div>
+        </div>
+        <button class="logout-button" onclick="location.href='/logout'">Logout</button>
+    </header>
+    
+    <div class="content">
+        <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="file" id="fileInput" required accept=".pdf">
+            <button type="submit" class="btn-primary">Upload & Convert</button>
+        </form>
+        
+        <!-- Active Queue Section -->
+        <div class="queue-container" id="activeQueueContainer" style="display: none;">
+            <div class="section-header">
+                <h2>Active Conversions</h2>
+            </div>
+            <table id="activeQueueTable" class="queue-table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="activeQueueBody">
+                    <!-- Active items will be added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Completed Library Section -->
+        <div class="queue-container mt-4">
+            <div class="section-header">
+                <h2>Audiobook Library</h2>
+            </div>
+            <table id="completedQueueTable" class="queue-table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="completedQueueBody">
+                    <!-- Completed items will be added here -->
+                </tbody>
+            </table>
+            <div id="emptyLibraryMsg" class="empty-state">
+                No audiobooks yet. Upload a paper to get started.
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

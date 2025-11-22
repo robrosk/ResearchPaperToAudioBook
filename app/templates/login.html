@@ -3,58 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Research Paper to AudioBook Converter</title>
+    <title>Login - AI Research Suite</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-header">
-                        <h4>Login | Research Paper To AudioBook Converter</h4>
+    <div class="main-wrapper">
+        <!-- Left Side: Services Showcase -->
+        <div class="services-panel">
+            <div class="brand">
+                <h1>AI Research Suite</h1>
+                <p>Supercharge your reading with our intelligent tools.</p>
+            </div>
+
+            <div class="services-grid">
+                <!-- Active Service -->
+                <div class="service-item active">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
                     </div>
-                    <div class="card-body">
-                        <form id="loginForm">
-                            <div class="form-group">
-                                <label for="email">Email address: </label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password: </label>
-                                <input type="password" class="form-control" id="password" required>
-                            </div>
-                            <input type="hidden" id="next_url" value="{{ next_url }}">
-                            <button type="submit">Login</button>
-                        </form>
-                        <hr>
+                    <div class="service-content">
+                        <h3>Research to Audiobook</h3>
+                        <p>Convert complex PDF papers into engaging audio summaries instantly.</p>
+                    </div>
+                </div>
+
+                <!-- Coming Soon -->
+                <div class="service-item coming-soon">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                    </div>
+                    <div class="service-content">
+                        <h3>Research to YouTube Video</h3>
+                        <p>Turn static papers into engaging video explanations automatically.</p>
+                        <span class="badge">Coming Soon</span>
+                    </div>
+                </div>
+
+                <div class="service-item coming-soon">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <div class="service-content">
+                        <h3>YouTube to Summary</h3>
+                        <p>Extract key insights from long technical videos.</p>
+                        <span class="badge">Coming Soon</span>
+                    </div>
+                </div>
+
+                <div class="service-item coming-soon">
+                    <div class="service-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </div>
+                    <div class="service-content">
+                        <h3>Data Extractor</h3>
+                        <p>Pull tables and charts from PDFs into Excel.</p>
+                        <span class="badge">Coming Soon</span>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="login-panel">
+            <div class="login-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Welcome Back</h4>
+                        <p class="subtitle">Sign in to access your tools</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                            </div>
+                            <input type="hidden" id="next_url" value="{{ next_url }}">
+                            <button type="submit">Sign In</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="footer-text">© 2025 Research AI. All rights reserved.</p>
+            </div>
+        </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        $(function() {
-            $('#loginForm').submit(function(e) {
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            
+            loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const email = $('#email').val();
-                const password = $('#password').val();
-    
-                $.ajax({
-                    url: '/login',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ email, password }),
-                })
-                .done(function(data) {
-                    localStorage.setItem('token', data.token);  // Save token or handle it as needed
-                    window.location.href = '/index';  // Redirect to the index page on successful login
-                })
-                .fail(function(xhr) {
-                    alert('Invalid login credentials.');  // Update to show a more user-friendly error message
-                });
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const button = loginForm.querySelector('button');
+                const originalText = button.textContent;
+
+                // Disable button
+                button.disabled = true;
+                button.textContent = 'Signing in...';
+
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem('token', data.token);
+                        window.location.href = '/services';
+                    } else {
+                        alert('Invalid login credentials.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = originalText;
+                }
             });
         });
     </script>

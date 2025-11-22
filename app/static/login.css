@@ -1,64 +1,230 @@
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f3f4f6;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --sidebar-bg: #1e1b4b; /* Deep indigo/navy */
+    --sidebar-text: #e0e7ff;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    font-size: 16px;
-    line-height: 1.6;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent scroll on full screen split */
 }
 
-/* Container and Card */
-.container {
-    padding-top: 2rem;
-}
-
-.card {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card-header, .card-body {
-    padding: 2rem;
-}
-
-/* Form Input and Button Styling */
-.form-group label {
-    font-weight: 600;
-}
-
-.form-control {
-    border-radius: 0.25rem;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-}
-
-.btn-primary {
-    background-color: #0056b3;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    display: block;
+.main-wrapper {
+    display: flex;
+    height: 100%;
     width: 100%;
 }
 
-.btn-primary:hover {
-    background-color: #004494;
+/* --- Left Side: Services Panel --- */
+.services-panel {
+    flex: 1;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
 }
 
-/* Link to Sign Up Page */
-a {
-    color: #0056b3;
+.brand h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
 }
 
-a:hover {
-    text-decoration: none;
-    color: #004494;
+.brand p {
+    font-size: 1.1rem;
+    color: #a5b4fc;
+    margin-bottom: 3rem;
 }
 
-/* Responsive Adjustments */
-@media (min-width: 768px) {
-    .container {
-        padding-top: 5rem;
+.services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.service-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+.service-item.active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #818cf8;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.service-item.coming-soon {
+    opacity: 0.7;
+}
+
+.service-icon {
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.service-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+}
+
+.service-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #c7d2fe;
+    line-height: 1.4;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: #fbbf24; /* Amber for coming soon */
+}
+
+/* --- Right Side: Login Panel --- */
+.login-panel {
+    flex: 1;
+    background-color: var(--bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.card-header {
+    padding: 2rem 2rem 1rem;
+    text-align: center;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.form-group { margin-bottom: 1.25rem; }
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+    background: #f9fafb;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.875rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--primary-hover);
+}
+
+.footer-text {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-wrapper {
+        flex-direction: column;
+        height: auto;
+        overflow: auto;
+    }
+    
+    .services-panel {
+        max-width: 100%;
+        padding: 3rem 2rem;
+    }
+    
+    .login-panel {
+        padding: 3rem 2rem;
     }
 }
